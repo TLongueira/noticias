@@ -22,8 +22,17 @@ getTopHeadlinesBR(){
   // ('http://newsapi.org/v2/top-headlines?country=br&language=es&apiKey=c6f7a287fb6d45e68ca50c958701107d');
  }
 
- getRSS(){
-   return this.http.get('https://www.clarin.com/rss/lo-ultimo/', { responseType: 'text' });
+ getClarin(){
+   return this.http.get('https://www.clarin.com/rss/politica/', { responseType: 'text' });
+ }
+ getTn(){
+   return this.http.get('https://tn.com.ar/feed/politica', { responseType: 'text' });
+ }
+ getPerfil(){
+   return this.http.get('https://www.perfil.com/rss/politica', { responseType: 'text' });
+ }
+ getLavoz(){
+   return this.http.get('https://www.lavoz.com.ar/rss/politica.xml', { responseType: 'text' });
  }
 
 
