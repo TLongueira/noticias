@@ -35,6 +35,10 @@ getTopHeadlinesBR(){
    return this.http.get('https://www.lavoz.com.ar/rss/politica.xml', { responseType: 'text' });
  }
 
+getTelam()
+{
+  return this.http.get('https://www.telam.com.ar/rss2/politica.xml', {responseType:'text'});
+}
 
 
 
