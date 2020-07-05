@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { NoticiasService } from 'src/app/services/noticias.service';
-import { Article, RespuestaTopHeadlines } from 'src/app/interfaces/interfaces';
+import { Noticia, Article } from 'src/app/interfaces/clases';
+const parseString = require('xml2js').parseString;
 
 @Component({
   selector: 'app-tab1',
@@ -11,31 +12,33 @@ export class Tab1Page implements OnInit {
 
 
   noticias: Article[] = [];
-  aux: Article[] = [];
-  respuesta: RespuestaTopHeadlines;
+  noticia: Noticia = new Noticia();
+  rss: any;
   constructor(private noticiasService: NoticiasService) {}
 
 
   ngOnInit(): void {
-    /*
-    this.noticiasService.getTopHeadlines().subscribe((resp) => {
-      console.log('noticias', resp);
-      this.noticias.push(...resp.articles);
+    this.noticiasService.getTelam().subscribe((resp: any) => {
+      this.rss = resp;
+    // tslint:disable-next-line: only-arrow-functions
+      parseString(this.rss, function(err, result) {
+      //console.dir(result.rss.channel[0]);
+      resp = result.rss.channel[0];
     });
-    */
-   this.respuesta = this.noticiasService.getTopHeadlines();
-
-   this.aux.push(...this.respuesta.articles);
-
-   // tslint:disable-next-line: prefer-for-of
-   for (let i = 0; i < this.aux.length; i++) {
-     const element = this.aux[i].source.name;
-
-     if (element !== 'Clarín' && element !== 'Infobae')
-     {
-      this.noticias.push(this.aux[i]);
-     }
-   }
+      for (let index = 0; index < 3; index++) {
+        this.noticia.author="Agencia Telam";
+        //this.noticia.content=resp.item[index].
+        this.noticia.description=resp.item[index].description[0];
+        this.noticia.publishedAt=resp.item[index].pubDate[0];
+        this.noticia.title =resp.item[index].title[0];
+        this.noticia.url=resp.item[index].link[0];
+        this.noticia.urlToImage=resp.item[index].enclosure[0].$.url;
+        //console.log(this.noticia);
+        this.noticias.push(this.noticia)
+        this.noticia=new Noticia();
+      }
+      //console.log(this.noticias);
+    });
   }
 
 }
